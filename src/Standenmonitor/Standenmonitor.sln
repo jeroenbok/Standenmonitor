@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandenMonitor.Web", "StandenMonitor.Web\StandenMonitor.Web.csproj", "{88C89112-548C-4E92-960C-B9DA7DA9A3D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandenMonitor.Core", "StandenMonitor.Core\StandenMonitor.Core.csproj", "{1B9E55D1-794C-40C6-9898-03A02F9E23D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StandenMonitor.Test", "StandenMonitor.Test\StandenMonitor.Test.csproj", "{39CBE62D-11F1-4025-84E9-5A43219D0D15}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +17,14 @@ Global
 		{88C89112-548C-4E92-960C-B9DA7DA9A3D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88C89112-548C-4E92-960C-B9DA7DA9A3D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88C89112-548C-4E92-960C-B9DA7DA9A3D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B9E55D1-794C-40C6-9898-03A02F9E23D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B9E55D1-794C-40C6-9898-03A02F9E23D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B9E55D1-794C-40C6-9898-03A02F9E23D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B9E55D1-794C-40C6-9898-03A02F9E23D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39CBE62D-11F1-4025-84E9-5A43219D0D15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39CBE62D-11F1-4025-84E9-5A43219D0D15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39CBE62D-11F1-4025-84E9-5A43219D0D15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39CBE62D-11F1-4025-84E9-5A43219D0D15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
