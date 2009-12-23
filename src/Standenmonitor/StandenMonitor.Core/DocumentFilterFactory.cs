@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
+using Fizzler.Systems.HtmlAgilityPack;
+using HtmlAgilityPack;
+using System.Linq;
 
 namespace StandenMonitor.Core
 {
@@ -150,26 +154,53 @@ FT = vrije teams
 
 	public class StandenMonitorScraper
 	{
+		private StandenReader standenReader = new StandenReader();
+
 		public Ranking GetRanking(string requestUrl)
 		{
+			HtmlDocument html = GetHtml(requestUrl);
+			HtmlNode node = html.DocumentNode;
+			HtmlNode standenHtml = node.QuerySelector(".contStanden");
+			//Console.WriteLine(standenHtml.InnerHtml);
+			Ranking ranking = new Ranking();
+
+			IList<HtmlNode> scoreNodes = node.QuerySelectorAll(".contStanden tr").ToList();
+			foreach (HtmlNode scoreNode in scoreNodes)
+			{
+				Score score = standenReader.ReadScore(scoreNode.OuterHtml);
+				if (score != null)
+					ranking.Scores.Add(score);
+			}
+
+			return ranking;
+		}
+
+		public virtual HtmlDocument GetHtml(string requestUrl)
+		{
+			Console.WriteLine("Requesting: " + requestUrl);
+			HtmlDocument html = new HtmlDocument();
 			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(requestUrl);
 			request.MaximumAutomaticRedirections = 4;
 			request.MaximumResponseHeadersLength = 10;
-			HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+			
+			using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+			{
+				Console.WriteLine("Content length is {0}", response.ContentLength);
+				Console.WriteLine("Content type is {0}", response.ContentType);
 
-			Console.WriteLine("Content length is {0}", response.ContentLength);
-			Console.WriteLine("Content type is {0}", response.ContentType);
-
-			// Get the stream associated with the response.
-			Stream receiveStream = response.GetResponseStream();
-
-			// Pipes the stream to a higher level stream reader with the required encoding format. 
-			StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8);
-
-			Console.WriteLine("Response stream received.");
-			Console.WriteLine(readStream.ReadToEnd());
-			response.Close();
-			readStream.Close();
+				// Get the stream associated with the response.
+				Stream receiveStream = response.GetResponseStream();
+				// Pipes the stream to a higher level stream reader with the required encoding format. 
+				using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8))
+				{
+					html.Load(readStream);
+					Console.WriteLine("Response stream received.");
+					Console.WriteLine(readStream.ReadToEnd());
+					readStream.Close();
+				}
+				response.Close();
+			}
+			return html;
 		}
 	}
 
@@ -177,9 +208,9 @@ FT = vrije teams
 	{
 		public string AgeClass;
 		public string Sex;
-		public string Name { get; set; }
+		public string Name;
 
-		public string Code { get; set;}
+		public string Code;
 	}
 
 	public class Ranking
@@ -202,10 +233,51 @@ FT = vrije teams
 		}
 	}
 
+	public class StandenReader
+	{
+		public Score ReadScore(string html)
+		{
+			if (string.IsNullOrEmpty(html))
+				return null;
+			if (!html.StartsWith("<tr", StringComparison.InvariantCultureIgnoreCase) || !html.EndsWith("</tr>", StringComparison.InvariantCultureIgnoreCase))
+				return null;
+
+			Score score = new Score();
+			
+			HtmlDocument htmlDocument = new HtmlDocument();
+			htmlDocument.LoadHtml(html);
+			IList<HtmlNode> values = htmlDocument.DocumentNode.QuerySelectorAll("td").ToList();
+			 
+			if (values.Count == 0)
+				return null;
+
+			score.Team = values[1].QuerySelector("a").InnerText;
+			score.Played = int.Parse(values[2].InnerText);
+			score.Won = int.Parse(values[3].InnerText);
+			score.Ties = int.Parse(values[4].InnerText);
+			score.Lost = int.Parse(values[5].InnerText); ;
+			score.GoalsMade = int.Parse(values[6].InnerText);
+			score.GoalsAgainst = int.Parse(values[7].InnerText);
+			score.PenaltyPoints = int.Parse(values[8].InnerText);
+			score.Points = int.Parse(values[9].InnerText);
+			
+			return score;
+		}
+		
+	}
+
 	public class Score
 	{
 		public int Points;
 		public string Team;
+		public int Played;
+		public int Won;
+		public int Even;
+		public int Lost;
+		public int GoalsMade;
+		public int GoalsAgainst;
+		public int PenaltyPoints;
+		public int Ties;
 	}
 
 	public class Club

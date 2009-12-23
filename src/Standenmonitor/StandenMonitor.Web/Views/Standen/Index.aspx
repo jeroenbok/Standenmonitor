@@ -1,12 +1,13 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Views/Shared/Site.Master" Inherits="System.Web.Mvc.ViewPage" %>
+<%@ Import Namespace="System.Web.UI.MobileControls"%>
 
+<%@ Import Namespace="StandenMonitor.Core" %>
 <asp:Content ID="indexTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Home Page
+	Home Page
 </asp:Content>
-
 <asp:Content ID="indexContent" ContentPlaceHolderID="MainContent" runat="server">
-    <h2><%= Html.Encode(ViewData["Message"]) %></h2>
-    <p>
-        To learn more about ASP.NET MVC visit <a href="http://asp.net/mvc" title="ASP.NET MVC Website">http://asp.net/mvc</a>.
-    </p>
+	<h2>
+		Standen</h2>
+	Bla bla praatje
+	<a href ="./Standen/amvj/H2/"> AMVJ - Heren 2</a>
 </asp:Content>

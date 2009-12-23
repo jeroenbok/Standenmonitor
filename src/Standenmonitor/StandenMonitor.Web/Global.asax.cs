@@ -18,8 +18,14 @@ namespace StandenMonitor.Web
 
 			routes.MapRoute(
 				"Default",                                              // Route name
-				"{controller}/{action}/{id}",                           // URL with parameters
-				new { controller = "Home", action = "Index", id = "" }  // Parameter defaults
+				"",                           // URL with parameters
+				new { controller = "Standen", action = "Index"}  // Parameter defaults
+			);
+
+			routes.MapRoute(
+				"Standen",                                              // Route name
+				"Standen/{club}/{team}",                           // URL with parameters
+				new { controller = "Standen", action = "Ranking", club = "AMVJ", team = "H2" }  // Parameter defaults
 			);
 
 		}
